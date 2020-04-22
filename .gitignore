@@ -1,3 +1,4 @@
 main
 .vscode/
 *.sdp
+*.out
