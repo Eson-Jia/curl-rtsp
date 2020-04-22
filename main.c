@@ -126,7 +126,7 @@ static void rtsp_describe(CURL *curl, const char *uri,
   {
     fclose(sdp_fp);
   }
-  curl_slist_free_all(headerList);
+  // curl_slist_free_all(headerList);
 }
 
 /* send RTSP SETUP request */
