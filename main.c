@@ -206,7 +206,7 @@ headerList = curl_slist_append(headerList, "Require: www.onvif.org/ver20/backcha
 #elif 0
   const char *transport = "RTP/AVP/TCP;unicast;interleaved=0-1"; /* TCP */
 #else
-const char *transport = "RTP/AVP/UDP;multicast"; /* UDP multicast  */ 461 Unsupported Transport
+const char *transport = "RTP/AVP;multicast;destination=224.2.1.1;port=60000-60001;ttl=128"; /* UDP multicast 461 Unsupported Transport in some device */
 #endif
   const char *range = "0.000-";
   int rc = EXIT_SUCCESS;
