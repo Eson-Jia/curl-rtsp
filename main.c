@@ -42,6 +42,7 @@
 #include <termios.h>
 #include <unistd.h>
 
+struct curl_slist *headerList = NULL;
 static int _getch(void)
 {
   struct termios oldt, newt;
@@ -108,8 +109,6 @@ static void rtsp_describe(CURL *curl, const char *uri,
   my_curl_easy_setopt(curl, CURLOPT_WRITEDATA, sdp_fp);
   my_curl_easy_setopt(curl, CURLOPT_RTSP_REQUEST, (long)CURL_RTSPREQ_DESCRIBE);
   set_author(curl);
-  struct curl_slist *headerList = NULL;
-  headerList = curl_slist_append(headerList, "Require: www.onvif.org/ver20/backchannel");
   /* set our custom set of headers */
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerList);
   my_curl_easy_perform(curl);
@@ -131,6 +130,7 @@ static void rtsp_setup(CURL *curl, const char *uri, const char *transport)
   my_curl_easy_setopt(curl, CURLOPT_RTSP_TRANSPORT, transport);
   my_curl_easy_setopt(curl, CURLOPT_RTSP_REQUEST, (long)CURL_RTSPREQ_SETUP);
   set_author(curl);
+  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerList);
   my_curl_easy_perform(curl);
 }
 
@@ -143,6 +143,7 @@ static void rtsp_play(CURL *curl, const char *uri, const char *range)
   my_curl_easy_setopt(curl, CURLOPT_RANGE, range);
   my_curl_easy_setopt(curl, CURLOPT_RTSP_REQUEST, (long)CURL_RTSPREQ_PLAY);
   //set_author(curl);
+  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerList);
   my_curl_easy_perform(curl);
 
   /* switch off using range again */
@@ -156,6 +157,7 @@ static void rtsp_teardown(CURL *curl, const char *uri)
   printf("\nRTSP: TEARDOWN %s\n", uri);
   my_curl_easy_setopt(curl, CURLOPT_RTSP_REQUEST, (long)CURL_RTSPREQ_TEARDOWN);
   set_author(curl);
+  curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerList);
   my_curl_easy_perform(curl);
 }
 
@@ -197,7 +199,8 @@ static void get_media_control_attribute(const char *sdp_filename,
 /* main app */
 int main(int argc, char *const argv[])
 {
-#if 1
+headerList = curl_slist_append(headerList, "Require: www.onvif.org/ver20/backchannel");
+#if 0
   const char *transport = "RTP/AVP;unicast;client_port=1234-1235"; /* UDP */
 #else
   /* TCP */
