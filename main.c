@@ -200,11 +200,13 @@ static void get_media_control_attribute(const char *sdp_filename,
 int main(int argc, char *const argv[])
 {
 headerList = curl_slist_append(headerList, "Require: www.onvif.org/ver20/backchannel");
-#if 0
+
+#if 1
   const char *transport = "RTP/AVP;unicast;client_port=1234-1235"; /* UDP */
+#elif 0
+  const char *transport = "RTP/AVP/TCP;unicast;interleaved=0-1"; /* TCP */
 #else
-  /* TCP */
-  const char *transport = "RTP/AVP/TCP;unicast;interleaved=0-1";
+const char *transport = "RTP/AVP/UDP;multicast"; /* UDP multicast  */ 461 Unsupported Transport
 #endif
   const char *range = "0.000-";
   int rc = EXIT_SUCCESS;
