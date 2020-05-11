@@ -204,7 +204,7 @@ headerList = curl_slist_append(headerList, "Require: www.onvif.org/ver20/backcha
   const char *transport = "RTP/AVP;unicast;client_port=1234-1235"; /* UDP */
 #else
   /* TCP */
-  const char *transport = "RTP/AVP/TCP;unicast;client_port=1234-1235";
+  const char *transport = "RTP/AVP/TCP;unicast;interleaved=0-1";
 #endif
   const char *range = "0.000-";
   int rc = EXIT_SUCCESS;
