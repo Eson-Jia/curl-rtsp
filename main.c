@@ -32,6 +32,12 @@
  * </DESC>
  */
 
+/*
+* 依赖: libcurl
+* 编译: gcc main.c -o main `pkg-config --cflags --libs libcurl`
+* 运行: ./main rtsp://192.168.10.147
+*
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

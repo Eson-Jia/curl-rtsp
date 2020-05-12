@@ -2,16 +2,16 @@
 
 ## 前言
 
-在视频监控应用场景中，有很多需要采集查看监控的人的语音发送到监控摄像头的音响上去以实现对被监控对象的语音控制。
+在视频监控应用场景中，有很多场景需要采集查看监控的人的语音发送到监控摄像头的音响上去以实现对被监控对象的语音控制。
 `ONVIF Core Specification Core_2.00文档`中章节`12.3 Back Channel Connection`对此进行了详细的描述。
 `ONVIF`语音对讲的实现完全基于`RTSP`协议，流程中没有用到`ONVIF`协议。
 
 ## RTSP Require-Tag
 
-RTSP 标准[RFC 2326]可以通过添加额外的头进行扩展，`Require`tag被引入用于处理特殊的功能扩展(参考 [RFC
+RTSP 标准[RFC 2326]可以通过添加额外的头进行扩展，引入`Require`tag 用于处理特殊的功能扩展(参考 [RFC
 2326], 1.5 Extending Rtsp and 12.32 Require).
-`Require`头用来判定是否支持某个特性，如果要求`server`理解某个特性并正确处理请求，需要对`server`的每个请求都携带这个`Require`头。
-`server`如果支持`backchannel`这个特性，需要理解`backchannel`对应的tag:
+`Require`头用来判定是否支持某个特性，如果要求`server`理解支持某个特性并正确处理请求，需要对`server`的每个请求都携带这个`Require`头。
+`server`如果支持`backchannel`这个特性，需要理解该特性所对应的tag:
 
 - `www.onvif.org/ver20/backchannel`
 
