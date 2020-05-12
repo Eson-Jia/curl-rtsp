@@ -6,16 +6,23 @@
 `ONVIF Core Specification Core_2.00文档`中章节`12.3 Back Channel Connection`对此进行了详细的描述。
 `ONVIF`语音对讲的实现完全基于`RTSP`协议，流程中没有用到`ONVIF`协议。
 
+## RTSP Require-Tag
+
+RTSP 标准[RFC 2326]可以通过添加额外的头进行扩展，`Require`tag被引入用于处理特殊的功能扩展(参考 [RFC
+2326], 1.5 Extending Rtsp and 12.32 Require).
+`Require`头用来判定是否支持某个特性，如果要求`server`理解某个特性并正确处理请求，需要对`server`的每个请求都携带这个`Require`头。
+`server`如果支持`backchannel`这个特性，需要理解`backchannel`对应的tag:`www.onvif.org/ver20/backchannel`
+
 ## DESCRIBE
 
-首先，在`Client - Server`发送`DESCRIBE`协议的时候添加额外的头`Require www.onvif.org/ver20/backchannel`,这是如果`Server`不支持语音对讲则会回复`551 Option not supported`，示例如下：
+在`Client - Server`发送`DESCRIBE`协议的时候添加前文说过的`Require-tag`,这是如果`Server`不支持语音对讲则会回复`551 Option not supported`，示例如下：
 
 ```bash
 Client – Server: DESCRIBE rtsp://192.168.0.1 RTSP/1.0
 CSeq: 1
 User-Agent: ONVIF Rtsp client
 Accept: application/sdp
-Require: www.onvif.org/ver20/backchannel
+Require: www.onvif.org/ver20/backchannel #!! Require-tag
 Server – Client: RTSP/1.0 551 Option not supported
 CSeq: 1
 Unsupported: www.onvif.org/ver20/backchannel
