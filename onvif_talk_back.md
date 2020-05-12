@@ -1,4 +1,4 @@
-# onvif talk back
+# onvif 语音对讲
 
 ## 前言
 
@@ -11,11 +11,15 @@
 RTSP 标准[RFC 2326]可以通过添加额外的头进行扩展，`Require`tag被引入用于处理特殊的功能扩展(参考 [RFC
 2326], 1.5 Extending Rtsp and 12.32 Require).
 `Require`头用来判定是否支持某个特性，如果要求`server`理解某个特性并正确处理请求，需要对`server`的每个请求都携带这个`Require`头。
-`server`如果支持`backchannel`这个特性，需要理解`backchannel`对应的tag:`www.onvif.org/ver20/backchannel`
+`server`如果支持`backchannel`这个特性，需要理解`backchannel`对应的tag:
+
+- `www.onvif.org/ver20/backchannel`
+
+如果client想要建立一个包含`backchannel`的`RTSP`连接，在这一系列请求(SUBSCRIBE,SETUP,PLAY,PAUSE,TEARDWON)中需要包含这个`Require www.onvif.org/ver20/backchannel`头。
 
 ## DESCRIBE
 
-在`Client - Server`发送`DESCRIBE`协议的时候添加前文说过的`Require-tag`,这是如果`Server`不支持语音对讲则会回复`551 Option not supported`，示例如下：
+在`Client - Server`发送`DESCRIBE`协议的时候添加前文说过的`Require-tag`,这时如果`Server`不支持语音对讲则会回复`551 Option not supported`，示例如下：
 
 ```bash
 Client – Server: DESCRIBE rtsp://192.168.0.1 RTSP/1.0
@@ -85,7 +89,8 @@ Session: 123124;timeout=60
 Transport:RTP/AVP;unicast;client_port=6296-6297;
 server_port=2346-2347
 ```
-上面`setup`了三次，分别建立了视频流，音频流以及最后一个的音频对讲流的连接。
+
+上面`setup`了三次，分别建立了视频流，音频流以及位于最后的音频对讲流的连接。
 
 ## PLAY
 
@@ -106,7 +111,7 @@ Session: 123124;timeout=60
 
 ## TEARDOWN
 
-通过发送`TEARDOWN`请求来关闭这个`session`:
+通过发送`TEARDOWN`请求来关闭这个包含三个流的`session`:
 
 ```bash
 Client – NVT: TEARDOWN rtsp://192.168.0.1 RTSP/1.0
@@ -120,7 +125,7 @@ Session: 123124
 
 ## Multicast Streaming
 
-如果客户端试图使用多播来发送数据，那么它需要使用`SETUP`请求中的`transport`参数来告诉`Server`多播地址和端口
+如果客户端要发送语音广播给多个摄像头，那么它需要使用`SETUP`请求中的`transport`参数来告诉`Server`多播地址和端口
 
 ```bash
 Client – Server: SETUP rtsp://192.168.0.1/audioback RTSP/1.0
@@ -135,3 +140,7 @@ Session: 123124;timeout=60
 Transport:RTP/AVP;multicast;destination=224.2.1.1;port=60
 000-60001;ttl=128;mode=”PLAY”
 ```
+
+## 参考
+
+[ONVIF Core Specification Core_2.00](http://developer.onvif.org/pub/core/Core_2.00.pdf)
